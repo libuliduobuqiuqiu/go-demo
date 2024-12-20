@@ -2,7 +2,6 @@ package test
 
 import (
 	"fmt"
-	"strconv"
 	"testing"
 	"unsafe"
 )
@@ -93,35 +92,21 @@ func TestSliceSend(t *testing.T) {
 
 func TestRange(t *testing.T) {
 
-	values := []string{"zhangsan", "wangwu"}
-	for _, i := range values[3:] {
-		fmt.Println(i)
-	}
-}
+	var (
+		a     []int
+		funcs []func()
+	)
 
-type person struct {
-	Name string
-	Age  int
-}
+	a = []int{1, 2, 3, 4, 5, 6}
 
-func TestSliceChange(t *testing.T) {
-	pList := []person{
-		{Name: "t1", Age: 22},
+	for _, v := range a {
+		fmt.Printf("v 的地址：%p\n", &v)
+		funcs = append(funcs, func() {
+			fmt.Println(v)
+		})
 	}
 
-	for _, p := range pList {
-		p.Age = ChangePerson(p.Age)
+	for _, f := range funcs {
+		f()
 	}
-
-	fmt.Println(pList)
-
-}
-
-func ChangePerson(p int) int {
-	return p + 1
-}
-
-func TestForPrint(t *testing.T) {
-	a := 100
-	fmt.Println(strconv.Itoa(a))
 }
