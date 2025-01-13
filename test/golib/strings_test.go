@@ -12,3 +12,7 @@ func TestUseStringsIndex(t *testing.T) {
 func TestUseUrlIndex(t *testing.T) {
 	stringsdemo.CheckUrlIndex()
 }
+
+func TestConvert(t *testing.T) {
+	stringsdemo.ConvertStringToInt64()
+}

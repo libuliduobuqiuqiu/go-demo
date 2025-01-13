@@ -3,6 +3,7 @@ package stringsdemo
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -48,4 +49,18 @@ func CheckUrlIndex() {
 	RegexUrl(text)
 	RegexUrl(text2)
 	fmt.Println(text[0:3])
+}
+
+func ConvertStringToInt64() {
+	data := "1863869983495565312"
+	a := 1863869983495565312
+	if result, err := strconv.Atoi(data); err == nil {
+		fmt.Println(result)
+	}
+
+	if result, err := strconv.ParseInt(data, 10, 64); err == nil {
+		fmt.Println(result)
+	}
+
+	fmt.Println(string(a))
 }
