@@ -44,6 +44,8 @@ func (r *routerManger) GetPersonInfo(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
+	fmt.Println(req.URL.Host, req.URL.Path, req.URL.Query())
+
 	if data, err := json.Marshal(Persons); err == nil {
 		w.Write(data)
 	}
