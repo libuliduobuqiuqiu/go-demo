@@ -24,6 +24,7 @@ type PersonResp struct {
 var Persons PersonResp
 
 func (r *routerManger) HandelePerson(w http.ResponseWriter, req *http.Request) {
+	// fmt.Println(req.URL.Host, req.URL.Path, req.URL.Query())
 	if req.Method == "POST" {
 		r.PostPersonInfo(w, req)
 	} else if req.Method == "GET" {
@@ -41,6 +42,7 @@ func (r *routerManger) HandelePerson(w http.ResponseWriter, req *http.Request) {
 
 // GetPersonInfo 获取创建的用户
 func (r *routerManger) GetPersonInfo(w http.ResponseWriter, req *http.Request) {
+	// fmt.Println(req.Header)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
@@ -86,8 +88,27 @@ func (r *routerManger) PostPersonInfo(w http.ResponseWriter, req *http.Request) 
 	}
 }
 
+func NotFoundHandler(w http.ResponseWriter, req *http.Request) {
+	fmt.Println(req.URL, req.URL.Path, req.URL.RawQuery)
+}
+
 func HandleHttpRequest() {
+	port := 8989
 	r := routerManger{}
-	http.HandleFunc("/person", r.HandelePerson)
-	log.Fatal(http.ListenAndServe("0.0.0.0:8989", nil))
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/person", r.HandelePerson)
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, pattern := mux.Handler(r)
+		fmt.Println(pattern)
+		if pattern == "" {
+			NotFoundHandler(w, r)
+		} else {
+			mux.ServeHTTP(w, r)
+		}
+	})
+
+	fmt.Printf("Server is running on http://0.0.0.0:%d\n", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), handler))
 }

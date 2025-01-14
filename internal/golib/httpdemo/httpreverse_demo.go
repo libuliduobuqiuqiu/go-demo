@@ -30,7 +30,6 @@ func GetProxyPassUrl(rawURL string) (proxyPassUrl *url.URL, err error) {
 }
 
 func ReverseProxy(w http.ResponseWriter, req *http.Request) {
-	fmt.Println(req.URL.String())
 	proxyPassUrl, err := GetProxyPassUrl(req.URL.String())
 	if err != nil {
 		log.Fatal(err)
@@ -39,6 +38,15 @@ func ReverseProxy(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(proxyPassUrl)
 	proxy := httputil.NewSingleHostReverseProxy(proxyPassUrl)
 	proxy.Transport = &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
+
+	proxy.Director = func(r *http.Request) {
+		r.Host = proxyPassUrl.Host
+		r.URL.Path = proxyPassUrl.Path
+		r.URL.Scheme = proxyPassUrl.Scheme
+		r.URL.Host = proxyPassUrl.Host
+		r.URL.RawQuery = ""
+	}
+
 	proxy.ServeHTTP(w, req)
 }
 
