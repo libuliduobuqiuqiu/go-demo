@@ -35,3 +35,9 @@ func TestNetParseIP(t *testing.T) {
 	t.Log(netdemo.IPToBinary(tmpIP))
 	t.Log(netdemo.IPToString(tmpIP))
 }
+
+func TestParseUrl(t *testing.T) {
+	url := "http://127.0.0.1:8090/netac"
+	netdemo.ParseUrlString(url)
+
+}

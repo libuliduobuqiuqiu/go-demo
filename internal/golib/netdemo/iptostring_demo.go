@@ -3,6 +3,7 @@ package netdemo
 import (
 	"fmt"
 	"net"
+	"net/url"
 )
 
 func IPToBinary(ip net.IP) string {
@@ -29,4 +30,16 @@ func IPToString(ip net.IP) string {
 			uint16(ipBytes[8])<<8|uint16(ipBytes[9]), uint16(ipBytes[10])<<8|uint16(ipBytes[11]),
 			uint16(ipBytes[12])<<8|uint16(ipBytes[13]), uint16(ipBytes[14])<<8|uint16(ipBytes[15]))
 	}
+}
+
+func ParseUrlString(targeUrl string) error {
+	tmpUrl, err := url.Parse(targeUrl)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(tmpUrl.RawPath)
+	fmt.Println(tmpUrl.Host)
+	fmt.Println(tmpUrl.Path)
+	return nil
 }

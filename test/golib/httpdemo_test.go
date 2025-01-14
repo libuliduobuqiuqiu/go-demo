@@ -25,8 +25,8 @@ func TestReverseHttp(t *testing.T) {
 }
 
 func TestCommitReq(t *testing.T) {
-	// tmpUrl := "http://127.0.0.1:8090/netac?proxy_pass=https://10.21.21.64:443/mgmt/tm/ltm/monitor/http/~Common~mo_http5055"
-	tmpUrl := "http://127.0.0.1:8090/netac?proxy_pass=http://127.0.0.1:8989/person"
+	tmpUrl := "http://127.0.0.1:8090/netac?proxy_pass=https://10.21.21.64:443/mgmt/tm/ltm/monitor/http/~Common~mo_http5055"
+	// tmpUrl := "http://127.0.0.1:8090/netac?proxy_pass=http://127.0.0.1:8989/person"
 	if err := httpdemo.CommitDeviceReq(tmpUrl); err != nil {
 		t.Fatal(err)
 	}
