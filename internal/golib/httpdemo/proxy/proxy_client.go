@@ -39,6 +39,11 @@ func CommitDeviceHttpReq(reqUrl string) (err error) {
 	return nil
 }
 
+// 1. 客户端发送http请求到服务端，区别普通在头部Upgrade:websocket和Connection:upgrade的信息
+// 2. 服务端接收http请求，确认升级成websocket请求，升级后返回101状态码和必要头部信息给客户端。
+// 3. 客户端接受到状态和头部信息后，确认http请求升级成websocket请求。
+// 4. 客户端和服务端会通过相同的连接进行全双工通信，发送消息的格式和数据帧完全不同于http请求。
+// 5. 客户端发送websocket信息，服务端没有按照websocket协议处理，通信就会失败。
 func CommitDeviceSshReq(serviceAddress string) {
 	// 建立websocket连接
 	endpoint := "/netac/base/ssh"

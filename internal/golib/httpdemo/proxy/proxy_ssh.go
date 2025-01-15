@@ -11,7 +11,7 @@ import (
 
 // 1. 接受http请求，升级为ws请求
 // 2. 根据传入的http请求参数，新建ssh配置，初始化client，根据client新建session
-// 3. 发送建立伪终端
+// 3. 发送建立伪终端, 建立通道将终端输出到ws中，将ws读取的命令输入到终端
 
 func HandleSshConnection(w http.ResponseWriter, r *http.Request) {
 	// 升级为Websocket请求
