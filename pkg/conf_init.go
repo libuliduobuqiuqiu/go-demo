@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
+	"runtime"
 )
 
 const (
@@ -35,7 +37,14 @@ type BaseConfig struct {
 
 func GetGlobalConfig(configPath string) GlobalConfig {
 	if configPath == "" {
-		configPath = ConfigPath
+		tmpPath := GetCallerInfo()
+		if tmpPath != "" {
+			pkgDirName := path.Dir(tmpPath)
+			baseDirName := path.Dir(pkgDirName)
+			configPath = path.Join(baseDirName, "configs", "conf.json")
+		} else {
+			configPath = ConfigPath
+		}
 	}
 
 	var globalConfig GlobalConfig
@@ -59,4 +68,14 @@ func GenMysqlDSN(configPath string) string {
 	mysqlConfig := config.MysqlConfig
 	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True",
 		mysqlConfig.Username, mysqlConfig.Password, mysqlConfig.Host, mysqlConfig.Port, mysqlConfig.Prefix)
+}
+
+func GetCallerInfo() string {
+	_, file, _, ok := runtime.Caller(1)
+	if !ok {
+		fmt.Printf("Unable to get caller info.")
+		return ""
+	}
+
+	return file
 }

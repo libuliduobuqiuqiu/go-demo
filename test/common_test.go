@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	"godemo/pkg"
 	"testing"
 	"unsafe"
 )
@@ -109,4 +110,9 @@ func TestRange(t *testing.T) {
 	for _, f := range funcs {
 		f()
 	}
+}
+
+func TestGetPath(t *testing.T) {
+	config := pkg.GetGlobalConfig("")
+	fmt.Println(config.F5Config)
 }

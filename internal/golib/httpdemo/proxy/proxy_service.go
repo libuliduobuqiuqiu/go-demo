@@ -47,6 +47,8 @@ func ReverseProxy(w http.ResponseWriter, req *http.Request) {
 }
 
 func StartReverseProxy() {
+	fmt.Println("Server started on :8090")
 	http.HandleFunc("/netac/base/proxy", ReverseProxy)
+	http.HandleFunc("/netac/base/ssh", HandleSshConnection)
 	http.ListenAndServe(":8090", nil)
 }

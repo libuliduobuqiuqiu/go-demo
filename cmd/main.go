@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"godemo/internal/golib/httpdemo/proxy"
+)
 
 func main() {
-	fmt.Println("go demo by libuliduobuqiuqiu")
+	proxy.CommitDeviceSshReq("127.0.0.1:8090")
 }
