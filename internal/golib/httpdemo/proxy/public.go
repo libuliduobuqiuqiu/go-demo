@@ -9,7 +9,7 @@ import (
 )
 
 type ProxyResponse struct {
-	Err     int         `json:"err`
+	Err     int         `json:"err"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 }

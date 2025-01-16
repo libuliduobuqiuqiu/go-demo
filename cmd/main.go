@@ -1,9 +1,7 @@
 package main
 
-import (
-	"godemo/internal/golib/httpdemo/proxy"
-)
+import "godemo/internal/goweb/gogin"
 
 func main() {
-	proxy.CommitDeviceSshReq("127.0.0.1:8090")
+	gogin.StartFileUploadServer()
 }

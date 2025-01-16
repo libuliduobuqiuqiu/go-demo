@@ -84,6 +84,7 @@ func CommitDeviceSshReq(serviceAddress string) {
 }
 
 // 读取输入
+// 如果用Test启动可能会无法监听os.Stdin输入
 func ProxyShell(ws *websocket.Conn) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
