@@ -5,6 +5,7 @@
 .vscode/
 
 company/
+company_*
 
 *conf.json
 ai_conf.json

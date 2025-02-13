@@ -21,6 +21,7 @@ type GlobalConfig struct {
 	MysqlConfig    MysqlConfig `json:"mysql,omiempty"`
 	CompanyMysql   MysqlConfig `json:"company,omiempty"`
 	Company57Mysql MysqlConfig `json:"company57,omiempty"`
+	Cookie         string      `json:"cookie,omiempty"`
 }
 
 type MysqlConfig struct {
