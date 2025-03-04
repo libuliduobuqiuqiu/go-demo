@@ -1,4 +1,4 @@
-package gotool_test
+package gotool
 
 import (
 	"godemo/internal/gotool/pprofdemo"

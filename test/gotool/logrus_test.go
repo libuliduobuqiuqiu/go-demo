@@ -1,7 +1,7 @@
-package goothers
+package gotool
 
 import (
-	"godemo/internal/goothers/logrusdemo"
+	"godemo/internal/gotool/loggingdemo/logrus"
 	"testing"
 )
 

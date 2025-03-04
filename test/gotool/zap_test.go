@@ -1,7 +1,7 @@
-package goothers
+package gotool
 
 import (
-	"godemo/internal/goothers/zapdemo"
+	"godemo/internal/gotool/loggingdemo/zapdemo"
 	"testing"
 )
 

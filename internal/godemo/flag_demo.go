@@ -1,4 +1,4 @@
-package gooptions
+package godemo
 
 import (
 	"flag"

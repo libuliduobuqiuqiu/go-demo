@@ -1,8 +1,8 @@
-package goothers
+package gotool
 
 import (
-	"godemo/internal/goothers/logrusdemo"
-	"godemo/internal/goothers/zapdemo"
+	"godemo/internal/gotool/loggingdemo/logrus"
+	"godemo/internal/gotool/loggingdemo/zapdemo"
 	"testing"
 
 	"github.com/go-faker/faker/v4"
