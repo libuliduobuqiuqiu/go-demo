@@ -187,3 +187,34 @@ func UseGormJoin() error {
 	}
 	return nil
 }
+
+func FindUserOrderBy() error {
+	var (
+		userList     []*model.User
+		descUserList []*model.User
+
+		names     []string
+		descNames []string
+	)
+
+	db := gormdemo.GetDB()
+	if err := db.Order("username").Limit(10).Find(&userList).Error; err != nil {
+		return err
+	}
+
+	for _, v := range userList {
+		names = append(names, v.UserName)
+	}
+
+	if err := db.Order("username desc").Limit(10).Find(&descUserList).Error; err != nil {
+		return err
+	}
+
+	for _, v := range descUserList {
+		descNames = append(descNames, v.UserName)
+	}
+
+	fmt.Println(names)
+	fmt.Println(descNames)
+	return nil
+}

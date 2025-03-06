@@ -109,3 +109,9 @@ func TestExistDB(t *testing.T) {
 		t.Log(v)
 	}
 }
+
+func TestFindOrderUser(t *testing.T) {
+	if err := dao.FindUserOrderBy(); err != nil {
+		t.Fatal(err)
+	}
+}
