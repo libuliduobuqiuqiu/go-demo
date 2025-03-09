@@ -2,11 +2,12 @@ package proxy
 
 import (
 	"crypto/tls"
-	"fmt"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetProxyPassUrl(rawURL string) (proxyPassUrl *url.URL, err error) {
@@ -25,16 +26,17 @@ func GetProxyPassUrl(rawURL string) (proxyPassUrl *url.URL, err error) {
 	return
 }
 
-func ReverseProxy(w http.ResponseWriter, req *http.Request) {
+func ProxyHttpReq(ctx *gin.Context) {
+	w := ctx.Writer
+	req := ctx.Request
+
 	proxyPassUrl, err := GetProxyPassUrl(req.URL.String())
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(proxyPassUrl)
 	proxy := httputil.NewSingleHostReverseProxy(proxyPassUrl)
 	proxy.Transport = &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
-
 	proxy.Director = func(r *http.Request) {
 		r.Host = proxyPassUrl.Host
 		r.URL.Path = proxyPassUrl.Path
@@ -44,11 +46,4 @@ func ReverseProxy(w http.ResponseWriter, req *http.Request) {
 	}
 
 	proxy.ServeHTTP(w, req)
-}
-
-func StartReverseProxy() {
-	fmt.Println("Server started on :8090")
-	http.HandleFunc("/netac/base/proxy", ReverseProxy)
-	http.HandleFunc("/netac/base/ssh", HandleSshConnection)
-	http.ListenAndServe(":8090", nil)
 }

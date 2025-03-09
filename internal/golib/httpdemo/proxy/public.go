@@ -14,10 +14,16 @@ type ProxyResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
+type ProxySshParams struct {
+	ProxyParams
+	Commands []string `json:"commands"`
+}
+
 type ProxyParams struct {
 	Address  string `json:"address"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Port     int    `json:"port,omitempty"`
 }
 
 func genErrInfo(err error) []byte {
