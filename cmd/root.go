@@ -4,9 +4,15 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+)
+
+var (
+	version   string
+	buildTime string
 )
 
 var rootCmd = &cobra.Command{
@@ -18,6 +24,15 @@ var rootCmd = &cobra.Command{
 	The project serves as a hands-on learning resource for Go developers to explore various aspects of the language and its ecosystem.`,
 }
 
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Display the current version of the godemo project.",
+	Long:  "Prints the version of this godemo project, including build information such as commit hash and build date if available",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("Version: %s\nBuild Time: %s\n", version, buildTime)
+	},
+}
+
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -26,5 +41,6 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.AddCommand(versionCmd)
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -4,7 +4,7 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"godemo/internal/golib/httpdemo/proxy"
+	"godemo/internal/goweb/gogin/proxy"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"

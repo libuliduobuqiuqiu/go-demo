@@ -42,7 +42,7 @@ func ProxyHttpReq(ctx *gin.Context) {
 		r.URL.Path = proxyPassUrl.Path
 		r.URL.Scheme = proxyPassUrl.Scheme
 		r.URL.Host = proxyPassUrl.Host
-		r.URL.RawQuery = ""
+		r.URL.RawQuery = proxyPassUrl.RawQuery
 	}
 
 	proxy.ServeHTTP(w, req)

@@ -26,7 +26,7 @@ func ProxyTerminalReq(ctx *gin.Context) {
 	w := ctx.Writer
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		HandleErrJson(w, err)
+		HandleErrJson(ctx, err)
 		return
 	}
 	defer ws.Close()

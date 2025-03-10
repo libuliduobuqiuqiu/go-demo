@@ -1,9 +1,12 @@
-package proxy
+package client
 
 import (
 	"bufio"
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"godemo/internal/goweb/gogin/proxy"
 	"godemo/pkg"
 	"io"
 	"log"
@@ -14,6 +17,54 @@ import (
 
 	"github.com/gorilla/websocket"
 )
+
+func genProxySshReqParams() (data []byte, err error) {
+	config := pkg.GetGlobalConfig("")
+	deviceConfig := config.F5Config
+	params := proxy.ProxySshParams{ProxyParams: proxy.ProxyParams{
+		Address:  deviceConfig.Host,
+		Username: deviceConfig.Username,
+		Password: deviceConfig.Password,
+	}}
+	params.Commands = []string{
+		"ifconfig",
+		"uname -a",
+		"who",
+	}
+
+	data, err = json.Marshal(params)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func CommitDeviceSshReq() error {
+	reqData, err := genProxySshReqParams()
+	if err != nil {
+		return err
+	}
+
+	proxySshUrl := "http://127.0.0.1:8090/netac/base/ssh"
+	client := http.Client{Timeout: 60 * time.Second}
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, proxySshUrl, bytes.NewBuffer(reqData))
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json;charset=utf-8")
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+	res, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	pkg.PrettyJson(res)
+	return nil
+}
 
 func CommitDeviceHttpReq(reqUrl string) (err error) {
 	client := http.Client{Timeout: 60 * time.Second}
@@ -44,9 +95,9 @@ func CommitDeviceHttpReq(reqUrl string) (err error) {
 // 3. 客户端接受到状态和头部信息后，确认http请求升级成websocket请求。
 // 4. 客户端和服务端会通过相同的连接进行全双工通信，发送消息的格式和数据帧完全不同于http请求。
 // 5. 客户端发送websocket信息，服务端没有按照websocket协议处理，通信就会失败。
-func CommitDeviceSshReq(serviceAddress string) {
+func CommitDeviceTerminalReq(serviceAddress string) {
 	// 建立websocket连接
-	endpoint := "/netac/base/ssh"
+	endpoint := "/netac/base/terminal"
 	reqUrl := url.URL{Scheme: "ws", Host: serviceAddress, Path: endpoint}
 	ws, resp, err := websocket.DefaultDialer.Dial(reqUrl.String(), nil)
 	if err != nil {
@@ -58,7 +109,7 @@ func CommitDeviceSshReq(serviceAddress string) {
 
 	config := pkg.GetGlobalConfig("")
 
-	params := ProxyParams{
+	params := proxy.ProxyParams{
 		Username: config.F5Config.Username,
 		Password: config.F5Config.Password,
 		Address:  fmt.Sprintf("%s:%d", config.F5Config.Host, config.F5Config.Port),

@@ -1,4 +1,4 @@
-package goweb
+package httpdemo
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 var mu sync.Mutex
 var count int
 
-func Server_init() {
+func InitServer() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/count", counter)
 	log.Fatal(http.ListenAndServe("127.0.0.1:8999", nil))

@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/sirupsen/logrus"
 )
 
 type ProxyResponse struct {
@@ -40,10 +42,14 @@ func genErrInfo(err error) []byte {
 	return resp
 }
 
-func HandleErrJson(w http.ResponseWriter, err error) {
-	resp := genErrInfo(err)
-	w.WriteHeader(http.StatusInternalServerError)
-	w.Write(resp)
+func HandleErrJson(ctx *gin.Context, err error) {
+	logrus.Warn(err)
+	resp := ProxyResponse{
+		Err:     500,
+		Message: err.Error(),
+	}
+
+	ctx.JSON(http.StatusInternalServerError, resp)
 }
 
 func HandleErrMessage(ws *websocket.Conn, err error) {

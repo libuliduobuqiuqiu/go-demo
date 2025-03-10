@@ -1,4 +1,4 @@
-package gogin
+package app
 
 import (
 	"fmt"
@@ -214,7 +214,7 @@ func othersGroupInit(engine *gin.Engine) {
 
 }
 
-func StartGin() {
+func Start() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 

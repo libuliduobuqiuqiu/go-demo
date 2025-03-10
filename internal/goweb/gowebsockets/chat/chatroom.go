@@ -1,4 +1,4 @@
-package gowebsockets
+package chat
 
 import (
 	"encoding/json"

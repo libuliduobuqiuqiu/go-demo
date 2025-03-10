@@ -1,15 +1,17 @@
-*.exe
-
 .idea/
-
 .vscode/
 
+# Binary File
+main
+godemo
+
+# Company File
 company/
 company_*
 
+# Config file
 *conf.json
 ai_conf.json
-
 
 # 临时文件
 *.temp
@@ -20,8 +22,6 @@ ai_conf.json
 
 # 汇编文件
 *.o
-
-main
 
 # 日志文件
 test/**/*.log

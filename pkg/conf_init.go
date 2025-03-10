@@ -37,6 +37,8 @@ type BaseConfig struct {
 }
 
 func GetGlobalConfig(configPath string) GlobalConfig {
+
+	// 设置全局配置文件
 	if configPath == "" {
 		tmpPath := GetCallerInfo()
 		if tmpPath != "" {

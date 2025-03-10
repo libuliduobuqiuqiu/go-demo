@@ -1,4 +1,4 @@
-package gogin
+package app
 
 import (
 	"net/http"
