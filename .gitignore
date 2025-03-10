@@ -13,16 +13,17 @@ company_*
 *conf.json
 ai_conf.json
 
-# 临时文件
+# Tempoary file
 *.temp
 
-# 性能分析文件
+# Performance analysis file
 *.profile
 *.out
 
-# 汇编文件
+# Compilation file
 *.o
 
-# 日志文件
+# log
 test/**/*.log
 test/**/*.gz
+*.log
