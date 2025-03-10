@@ -17,6 +17,6 @@ wsl:
 
 mac:
 	go env -w CGO_ENABLED=0
-	go env -w GOOS=linux
+	go env -w GOOS=darwin
 	go env -w GOARCH=arm64
 	$(call build)
