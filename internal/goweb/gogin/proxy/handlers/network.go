@@ -43,8 +43,8 @@ func TraceRoute(c *gin.Context) {
 		return
 	}
 
-	tmpCount := c.DefaultQuery("count", "3")
-	tmpTimeout := c.DefaultQuery("timeout", "30")
+	tmpCount := c.DefaultQuery("count", "30")
+	tmpTimeout := c.DefaultQuery("timeout", "300")
 	tmpTtl := c.DefaultQuery("max_ttl", "30")
 
 	count, timeout, ttl, err := checkTraceRouteParam(tmpCount, tmpTimeout, tmpTtl)
@@ -55,8 +55,12 @@ func TraceRoute(c *gin.Context) {
 
 	networkService := service.NewNetworkService()
 	res, err := networkService.Traceroute(address, count, timeout, ttl)
+	if err != nil {
+		public.HandleErrJson(c, err)
+		return
+	}
 	resp := struct {
-		TracerouteRes string `json:"traecroute_res"`
+		TracerouteRes []string `json:"traecroute_res"`
 	}{
 		TracerouteRes: res,
 	}
