@@ -30,3 +30,7 @@ func (n *NetworkService) Ping(address, timeout, count string) (res string, err e
 	}
 	return buf.String(), nil
 }
+
+func (n *NetworkService) Traceroute(address string, count, timeout, ttl int) (res string, err error) {
+	return
+}
