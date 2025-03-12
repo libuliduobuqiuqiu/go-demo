@@ -6,7 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"godemo/internal/goweb/gogin/proxy"
+	"godemo/internal/goweb/gogin/proxy/public"
 	"godemo/pkg"
 	"io"
 	"log"
@@ -21,7 +21,7 @@ import (
 func genProxySshReqParams() (data []byte, err error) {
 	config := pkg.GetGlobalConfig("")
 	deviceConfig := config.F5Config
-	params := proxy.ProxySshParams{ProxyParams: proxy.ProxyParams{
+	params := public.ProxySshParams{ProxyParams: public.ProxyParams{
 		Address:  deviceConfig.Host,
 		Username: deviceConfig.Username,
 		Password: deviceConfig.Password,
@@ -109,7 +109,7 @@ func CommitDeviceTerminalReq(serviceAddress string) {
 
 	config := pkg.GetGlobalConfig("")
 
-	params := proxy.ProxyParams{
+	params := public.ProxyParams{
 		Username: config.F5Config.Username,
 		Password: config.F5Config.Password,
 		Address:  fmt.Sprintf("%s:%d", config.F5Config.Host, config.F5Config.Port),

@@ -1,6 +1,7 @@
-package proxy
+package handlers
 
 import (
+	"godemo/internal/goweb/gogin/proxy/public"
 	"io"
 	"log"
 	"net/http"
@@ -14,7 +15,7 @@ import (
 // 2. 根据传入的http请求参数，新建ssh配置，初始化client，根据client新建session
 // 3. 发送建立伪终端, 建立通道将终端输出到ws中，将ws读取的命令输入到终端
 
-func ProxyTerminalReq(ctx *gin.Context) {
+func Terminal(ctx *gin.Context) {
 	// 升级为Websocket请求
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
@@ -26,22 +27,22 @@ func ProxyTerminalReq(ctx *gin.Context) {
 	w := ctx.Writer
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		HandleErrJson(ctx, err)
+		public.HandleErrJson(ctx, err)
 		return
 	}
 	defer ws.Close()
 
 	// 读取传入参数
-	params := ProxyParams{}
+	params := public.ProxyParams{}
 	if err = ws.ReadJSON(&params); err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 
 	// 打开Ssh Client
 	client, err := NewSshClient(params.Address, params.Username, params.Password)
 	if err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 
@@ -49,7 +50,7 @@ func ProxyTerminalReq(ctx *gin.Context) {
 
 	session, err := client.NewSession()
 	if err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 
@@ -58,25 +59,25 @@ func ProxyTerminalReq(ctx *gin.Context) {
 		ssh.TTY_OP_ISPEED: 14400,
 		ssh.TTY_OP_OSPEED: 14400,
 	}); err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 
 	stdin, err := session.StdinPipe()
 	if err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 
 	stdout, err := session.StdoutPipe()
 	if err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 
 	stderr, err := session.StderrPipe()
 	if err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 
@@ -85,7 +86,7 @@ func ProxyTerminalReq(ctx *gin.Context) {
 	go io.Copy(stdin, wsReader(ws))
 
 	if err := session.Shell(); err != nil {
-		HandleErrMessage(ws, err)
+		public.HandleErrMessage(ws, err)
 		return
 	}
 

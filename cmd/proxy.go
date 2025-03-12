@@ -4,7 +4,7 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"godemo/internal/goweb/gogin/proxy"
+	"godemo/internal/goweb/gogin/proxy/routers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -30,7 +30,7 @@ It is designed for developers and sysadmins who need a robust solution for handl
 		if isDebug {
 			gin.SetMode(gin.DebugMode)
 		}
-		proxy.InitProxyRouter(address, port)
+		routers.StartProxyService(address, port)
 	},
 }
 

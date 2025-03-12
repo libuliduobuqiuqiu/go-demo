@@ -1,13 +1,16 @@
-package proxy
+package routers
 
 import (
 	"fmt"
+	"godemo/internal/goweb/gogin/proxy/public"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func InitProxyRouter(address string, port int) {
+var registerFunc []func(*gin.RouterGroup)
+
+func StartProxyService(address string, port int) {
 	router := gin.New()
 	router.Use(gin.Recovery())
 
@@ -16,16 +19,17 @@ func InitProxyRouter(address string, port int) {
 	}
 
 	router.NoRoute(func(ctx *gin.Context) {
-		ctx.JSON(http.StatusNotFound, ProxyResponse{
+		ctx.JSON(http.StatusNotFound, public.ProxyResponse{
 			Err:     http.StatusNotFound,
 			Message: "The request url was not found on the server",
 		})
 	})
 
-	group := router.Group("netac/base")
-	group.Any("proxy", ProxyHttpReq)
-	group.GET("terminal", ProxyTerminalReq)
-	group.POST("ssh", ProxySshReq)
+	// Register router
+	rootGroup := router.Group("netac/base")
+	for _, f := range registerFunc {
+		f(rootGroup)
+	}
 
 	router.Run(fmt.Sprintf("%s:%d", address, port))
 }

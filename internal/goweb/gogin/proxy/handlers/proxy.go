@@ -1,4 +1,4 @@
-package proxy
+package handlers
 
 import (
 	"crypto/tls"
@@ -26,7 +26,7 @@ func GetProxyPassUrl(rawURL string) (proxyPassUrl *url.URL, err error) {
 	return
 }
 
-func ProxyHttpReq(ctx *gin.Context) {
+func Proxy(ctx *gin.Context) {
 	w := ctx.Writer
 	req := ctx.Request
 

@@ -1,4 +1,4 @@
-package proxy
+package handlers
 
 import (
 	"bytes"
@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"godemo/internal/goweb/gogin/proxy/public"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -36,21 +37,21 @@ func SshConnect(address, username, password string, port int, isKeyboardInteract
 	return
 }
 
-func ProxySshReq(ctx *gin.Context) {
+func ExecSshCommand(ctx *gin.Context) {
 	var (
-		params ProxySshParams
-		resp   ProxyResponse
+		params public.ProxySshParams
+		resp   public.ProxyResponse
 		cmdRes map[string]string
 	)
 
 	if err := ctx.BindJSON(&params); err != nil {
-		HandleErrJson(ctx, err)
+		public.HandleErrJson(ctx, err)
 		return
 	}
 
 	client, err := SshConnect(params.Address, params.Username, params.Password, params.Port, true)
 	if err != nil {
-		HandleErrJson(ctx, err)
+		public.HandleErrJson(ctx, err)
 		return
 	}
 
@@ -59,7 +60,7 @@ func ProxySshReq(ctx *gin.Context) {
 	for _, cmd := range params.Commands {
 		session, err := client.NewSession()
 		if err != nil {
-			HandleErrJson(ctx, err)
+			public.HandleErrJson(ctx, err)
 			return
 		}
 		defer session.Close()
@@ -68,7 +69,7 @@ func ProxySshReq(ctx *gin.Context) {
 		session.Stderr = &stderrBuf
 		if err = session.Run(cmd); err != nil {
 			err = fmt.Errorf("Run command:%s:%s, error: %w", cmd, stderrBuf.String(), err)
-			HandleErrJson(ctx, err)
+			public.HandleErrJson(ctx, err)
 			return
 		}
 		cmdRes[cmd] = stdoutBuf.String()
