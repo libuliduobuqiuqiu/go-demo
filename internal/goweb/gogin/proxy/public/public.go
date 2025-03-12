@@ -11,6 +11,7 @@ import (
 )
 
 type ProxyResponse struct {
+	Code    int         `json:"code"`
 	Err     int         `json:"err"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
@@ -29,7 +30,6 @@ type ProxyParams struct {
 }
 
 func genErrInfo(err error) []byte {
-	log.Printf(err.Error())
 	r := ProxyResponse{
 		Err:     500,
 		Message: err.Error(),
@@ -40,6 +40,16 @@ func genErrInfo(err error) []byte {
 		log.Printf("Marshal Error.")
 	}
 	return resp
+}
+
+func HandleSuccessJson(ctx *gin.Context, data interface{}) {
+	resp := ProxyResponse{
+		Code:    200,
+		Message: "success",
+		Data:    data,
+	}
+
+	ctx.JSON(http.StatusOK, resp)
 }
 
 func HandleErrJson(ctx *gin.Context, err error) {

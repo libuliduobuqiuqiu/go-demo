@@ -13,4 +13,5 @@ func init() {
 func RegisterNetworkRouters(group *gin.RouterGroup) {
 	networkGroup := group.Group("")
 	networkGroup.GET("terminal", handlers.Terminal)
+	networkGroup.GET("ping", handlers.Ping)
 }

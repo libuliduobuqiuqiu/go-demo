@@ -2,13 +2,12 @@ package handlers
 
 import (
 	"godemo/internal/goweb/gogin/proxy/public"
-	"io"
-	"log"
+	"godemo/internal/goweb/gogin/proxy/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"golang.org/x/crypto/ssh"
+	"github.com/sirupsen/logrus"
 )
 
 // 1. 接受http请求，升级为ws请求
@@ -23,13 +22,12 @@ func Terminal(ctx *gin.Context) {
 		},
 	}
 
-	r := ctx.Request
-	w := ctx.Writer
-	ws, err := upgrader.Upgrade(w, r, nil)
+	ws, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		public.HandleErrJson(ctx, err)
 		return
 	}
+
 	defer ws.Close()
 
 	// 读取传入参数
@@ -39,126 +37,9 @@ func Terminal(ctx *gin.Context) {
 		return
 	}
 
-	// 打开Ssh Client
-	client, err := NewSshClient(params.Address, params.Username, params.Password)
-	if err != nil {
-		public.HandleErrMessage(ws, err)
-		return
+	terminalService := service.NewTerminalService()
+	if err = terminalService.BuildTerminal(params, ws); err != nil {
+		logrus.Error(err)
 	}
 
-	defer client.Close()
-
-	session, err := client.NewSession()
-	if err != nil {
-		public.HandleErrMessage(ws, err)
-		return
-	}
-
-	if err = session.RequestPty("xterm", 768, 1024, ssh.TerminalModes{
-		ssh.ECHO:          1,
-		ssh.TTY_OP_ISPEED: 14400,
-		ssh.TTY_OP_OSPEED: 14400,
-	}); err != nil {
-		public.HandleErrMessage(ws, err)
-		return
-	}
-
-	stdin, err := session.StdinPipe()
-	if err != nil {
-		public.HandleErrMessage(ws, err)
-		return
-	}
-
-	stdout, err := session.StdoutPipe()
-	if err != nil {
-		public.HandleErrMessage(ws, err)
-		return
-	}
-
-	stderr, err := session.StderrPipe()
-	if err != nil {
-		public.HandleErrMessage(ws, err)
-		return
-	}
-
-	go io.Copy(wsWriter(ws), stdout)
-	go io.Copy(wsWriter(ws), stderr)
-	go io.Copy(stdin, wsReader(ws))
-
-	if err := session.Shell(); err != nil {
-		public.HandleErrMessage(ws, err)
-		return
-	}
-
-	if err := session.Wait(); err != nil {
-		log.Printf("session ended with error: %v", err)
-	}
-
-}
-
-func NewSshClient(address, username, password string) (client *ssh.Client, err error) {
-	clientConfig := ssh.ClientConfig{
-		User: username,
-		Auth: []ssh.AuthMethod{
-			ssh.Password(password),
-			setKeyboardInteractive(password),
-		},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-	}
-
-	client, err = ssh.Dial("tcp", address, &clientConfig)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-func wsReader(ws *websocket.Conn) io.Reader {
-	pr, pw := io.Pipe()
-	go func() {
-		defer pw.Close()
-		for {
-			_, msg, err := ws.ReadMessage()
-			if err != nil {
-				return
-			}
-			pw.Write(msg)
-		}
-	}()
-
-	return pr
-}
-
-func wsWriter(ws *websocket.Conn) io.Writer {
-	pr, pw := io.Pipe()
-	go func() {
-		defer pr.Close()
-		buf := make([]byte, 1024)
-		for {
-			n, err := pr.Read(buf)
-			if err != nil {
-				return
-			}
-
-			ws.WriteMessage(websocket.TextMessage, buf[:n])
-		}
-	}()
-	return pw
-}
-
-// 设置键盘交互
-func setKeyboardInteractive(password string) ssh.AuthMethod {
-	keyboardInteractiveChallenge := func(
-		user,
-		instruction string,
-		questions []string,
-		echos []bool,
-	) (answers []string, err error) {
-		if len(questions) == 0 {
-			return []string{}, nil
-		}
-		return []string{password}, nil
-	}
-	return ssh.KeyboardInteractive(keyboardInteractiveChallenge)
 }
