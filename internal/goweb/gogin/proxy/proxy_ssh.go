@@ -19,15 +19,7 @@ func SshConnect(address, username, password string, port int, isKeyboardInteract
 	}
 
 	if isKeyboardInteractive {
-		KeyboardInteractiveChallenage := func(name, instruction string, questions []string, echos []bool) (answers []string, err error) {
-			if len(questions) == 0 {
-				return []string{}, nil
-			}
-			return []string{password}, nil
-		}
-		config.Auth = []ssh.AuthMethod{ssh.KeyboardInteractive(KeyboardInteractiveChallenage)}
-	} else {
-		config.Auth = []ssh.AuthMethod{ssh.Password(password)}
+		config.Auth = []ssh.AuthMethod{setKeyboardInteractive(password)}
 	}
 
 	if port != 0 {

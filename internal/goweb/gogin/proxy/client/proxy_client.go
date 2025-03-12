@@ -139,7 +139,7 @@ func CommitDeviceTerminalReq(serviceAddress string) {
 func ProxyShell(ws *websocket.Conn) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		command := scanner.Text() + "\r\n"
+		command := scanner.Text() + "\n"
 		if err := ws.WriteMessage(websocket.TextMessage, []byte(command)); err != nil {
 			log.Printf(err.Error())
 		}
