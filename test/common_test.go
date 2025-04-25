@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	"godemo/internal/godemo"
 	"godemo/pkg"
 	"testing"
 	"unsafe"
@@ -115,4 +116,12 @@ func TestRange(t *testing.T) {
 func TestGetPath(t *testing.T) {
 	config := pkg.GetGlobalConfig("")
 	fmt.Println(config.F5Config)
+}
+
+func TestGetOpts(t *testing.T) {
+
+	t.Log("start")
+	godemo.GetOpts([]godemo.InfoInterface{}...)
+	t.Log("end")
+
 }

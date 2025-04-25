@@ -22,6 +22,7 @@ type User struct {
 	Century     string    `gorm:"column:century;not null" json:"century"`
 	Date        time.Time `gorm:"column:date;not null" json:"date"`
 	CompanyCode string    `gorm:"column:company_code;not null" json:"company_code"`
+	Age         int32     `gorm:"column:age" json:"age"`
 }
 
 // TableName User's table name

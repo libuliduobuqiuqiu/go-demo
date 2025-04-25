@@ -59,7 +59,7 @@ func TestInsertUser(t *testing.T) {
 }
 
 func TestGetUsers(t *testing.T) {
-	err := dao.GetUsers()
+	_, err := dao.GetUsers()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,7 +84,9 @@ func TestGormFindUser2(t *testing.T) {
 }
 
 func TestGormGenFind(t *testing.T) {
-	dao2.ListUsers()
+	if err := dao2.ListUsers(); err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestExistDB(t *testing.T) {

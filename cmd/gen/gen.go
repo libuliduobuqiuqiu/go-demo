@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"godemo/pkg"
 	"log"
 
@@ -10,7 +11,7 @@ import (
 )
 
 const (
-	confPath = "/data/GoDemo/configs/local_conf.json"
+	confPath = "/data/MyRepo/go-demo/configs/local_conf.json"
 )
 
 func main() {
@@ -30,6 +31,7 @@ func main() {
 		OutPath: "../../internal/gostorage/gormgendemo/query",
 		Mode:    gen.WithoutContext | gen.WithDefaultQuery,
 	})
+	fmt.Println(g.OutPath)
 	g.UseDB(db)
 
 	g.ApplyBasic(

@@ -37,6 +37,7 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	_user.Century = field.NewString(tableName, "century")
 	_user.Date = field.NewTime(tableName, "date")
 	_user.CompanyCode = field.NewString(tableName, "company_code")
+	_user.Age = field.NewInt32(tableName, "age")
 
 	_user.fillFieldMap()
 
@@ -57,6 +58,7 @@ type user struct {
 	Century     field.String
 	Date        field.Time
 	CompanyCode field.String
+	Age         field.Int32
 
 	fieldMap map[string]field.Expr
 }
@@ -83,6 +85,7 @@ func (u *user) updateTableName(table string) *user {
 	u.Century = field.NewString(table, "century")
 	u.Date = field.NewTime(table, "date")
 	u.CompanyCode = field.NewString(table, "company_code")
+	u.Age = field.NewInt32(table, "age")
 
 	u.fillFieldMap()
 
@@ -99,7 +102,7 @@ func (u *user) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (u *user) fillFieldMap() {
-	u.fieldMap = make(map[string]field.Expr, 10)
+	u.fieldMap = make(map[string]field.Expr, 11)
 	u.fieldMap["id"] = u.ID
 	u.fieldMap["email"] = u.Email
 	u.fieldMap["password"] = u.Password
@@ -110,6 +113,7 @@ func (u *user) fillFieldMap() {
 	u.fieldMap["century"] = u.Century
 	u.fieldMap["date"] = u.Date
 	u.fieldMap["company_code"] = u.CompanyCode
+	u.fieldMap["age"] = u.Age
 }
 
 func (u user) clone(db *gorm.DB) user {

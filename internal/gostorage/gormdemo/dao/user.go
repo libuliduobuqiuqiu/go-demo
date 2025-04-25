@@ -94,20 +94,20 @@ func InsertUserByTrans() error {
 	return err
 }
 
-func GetUsers() error {
+func GetUsers() (user *model.User, err error) {
 	db := gormdemo.GetDB()
+	user = &model.User{}
 
 	var (
-		user     model.User
 		userList []*model.User
 	)
 
-	if err := db.Select("id", "email", "username").Limit(10).Find(&userList).Error; err != nil {
-		return err
+	if err = db.Select("id", "email", "username").Limit(10).Find(&userList).Error; err != nil {
+		return
 	}
 
-	if err := db.Where("email like ?", "%com").Take(&user).Error; err != nil {
-		return err
+	if err = db.Where("email like ?", "%com").Take(user).Error; err != nil {
+		return
 	}
 
 	for _, v := range userList {
@@ -115,7 +115,7 @@ func GetUsers() error {
 	}
 
 	fmt.Println(user)
-	return nil
+	return
 }
 
 func UseGromDryRun() {

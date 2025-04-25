@@ -3,26 +3,39 @@ package dao
 import (
 	"fmt"
 	"godemo/internal/gostorage/gormdemo"
+	"godemo/internal/gostorage/gormgendemo/model"
 	"godemo/internal/gostorage/gormgendemo/query"
-	"log"
 )
 
-func ListUsers() {
+type MyUser struct {
+	model.User
+
+	Info string `json:"info"`
+}
+
+func ListUsers() (err error) {
 
 	db, err := gormdemo.InitDB()
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 
 	query.SetDefault(db)
-	users, err := query.User.Find()
+	_, err = query.User.Update(query.User.Age, 99)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 
-	for _, u := range users {
-		fmt.Println(u)
+	var myUsers []*MyUser
+	err = db.Find(&myUsers).Error
+	if err != nil {
+		return
 	}
 
-	fmt.Println(len(users))
+	fmt.Println(len(myUsers))
+	for _, v := range myUsers {
+		fmt.Println(v)
+	}
+
+	return
 }
