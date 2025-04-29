@@ -8,12 +8,12 @@ import (
 )
 
 func TestTraceroute(t *testing.T) {
+	start := time.Now()
 	results, err := traceroute.Traceroute("192.168.23.64", traceroute.DefaultConfig())
 	if err != nil {
 		t.Fatalf("traceroute failed: %v", err)
 	}
 
-	start := time.Now()
 	fmt.Printf("\n追踪结果:\n")
 	for _, result := range results {
 		if result.Success {
