@@ -2,62 +2,85 @@ package pkg
 
 import (
 	"fmt"
-	"strings"
-
-	"github.com/pkg/errors"
+	"runtime"
 )
 
 const (
+	DEPTH        = 32
 	SEPARATOR    = ":"
 	DEFAULTERROR = iota + 3000
 	INTERNALERROR
 	BADREQUESTERROR
 )
 
+type Frame struct {
+	File string
+	Line int
+	Name string
+}
+
 type StackTraceInterface interface {
-	StackTrace() errors.StackTrace
+	StackTrace() []Frame
 }
 
 type CustomError struct {
-	code     int
-	messages []string
-	err      error
-	stacks   errors.StackTrace
+	code   int
+	msg    string
+	cause  error
+	stacks []uintptr
 }
 
 func (c *CustomError) Error() string {
-	if len(c.messages) > 0 {
-		msg := strings.Join(c.messages, SEPARATOR)
-		return fmt.Sprintf("%s%s%s", msg, SEPARATOR, c.err.Error())
-	} else {
-		return c.err.Error()
+	if c.cause != nil {
+		return fmt.Sprintf("Code=%d, Message=%s, Cauese=%v", c.code, c.msg, c.cause)
 	}
+	return fmt.Sprintf("Code=%d, Message=%s", c.code, c.msg)
 }
 
 func (c *CustomError) Code() int {
 	return c.code
 }
 
-func (c *CustomError) StackTrace() errors.StackTrace {
-	return c.stacks
-}
+func (c *CustomError) StackTrace() (stackFrame []Frame) {
+	frames := runtime.CallersFrames(c.stacks)
 
-func NewCustomErr(code int, msg string, err error) *CustomError {
-	tmp := &CustomError{
-		code: code,
-		err:  err,
+	for {
+		frame, more := frames.Next()
+
+		tmp := Frame{
+			File: frame.File,
+			Line: frame.Line,
+			Name: frame.Function,
+		}
+		stackFrame = append(stackFrame, tmp)
+
+		if !more {
+			break
+		}
 	}
 
-	if v, ok := err.(StackTraceInterface); ok {
-		tmp.stacks = v.StackTrace()
-	}
-
-	tmp.messages = append(tmp.messages, err.Error(), msg)
-	return tmp
+	return
 }
 
-func NewErrWrf(msg string, err error) error {
-	return NewCustomErr(
-		INTERNALERROR, msg, err,
-	)
+func (c *CustomError) Unwrap() error {
+	return c.cause
+}
+
+func newCustomErr(code int, msg string, cause error) *CustomError {
+	pcs := make([]uintptr, DEPTH)
+	n := runtime.Callers(2, pcs)
+
+	return &CustomError{
+		code:   code,
+		cause:  cause,
+		msg:    msg,
+		stacks: pcs[:n],
+	}
+}
+
+func NewErr(msg string) error {
+	return newCustomErr(INTERNALERROR, msg, nil)
+}
+func WrapErr(code int, msg string, err error) error {
+	return newCustomErr(code, msg, err)
 }
