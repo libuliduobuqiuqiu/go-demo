@@ -2,54 +2,12 @@ package test
 
 import (
 	"fmt"
-	"godemo/internal/godemo"
-	"godemo/pkg"
+	"sync"
 	"testing"
 	"unsafe"
 )
 
-type MainPerson struct {
-	Name string `json:"name"`
-}
-
-func JudgeMainPerson(p interface{}) {
-	if person, ok := p.(*MainPerson); ok {
-		fmt.Println(person.Name)
-		person.Name = "linsan"
-	}
-}
-
-func JudgeList(notExistPerson []string) {
-	fmt.Println(len(notExistPerson))
-	if len(notExistPerson) > 0 {
-		fmt.Println("Not Exist Person")
-	}
-	fmt.Println("done.")
-}
-
-func TestJudegeMainPerson(t *testing.T) {
-	p := MainPerson{
-		Name: "zhangsan",
-	}
-	JudgeMainPerson(&p)
-	fmt.Println(p.Name)
-}
-
-func TestJudgeList(t *testing.T) {
-	JudgeList(nil)
-}
-
-func ReturnStruct() (data MainPerson) {
-	fmt.Printf("%p\n", &data)
-	return
-}
-
-func TestReturnStruct(t *testing.T) {
-	data := ReturnStruct()
-	fmt.Printf("%p\n", &data)
-	return
-}
-
+// Test the slice expansion mechanism.
 func TestSliceAppend(t *testing.T) {
 	var b []int = nil
 	fmt.Printf("%p\n", b)
@@ -76,24 +34,8 @@ func TestSliceAppend(t *testing.T) {
 	fmt.Printf("New array address: %p\n", unsafe.Pointer(&s[0]))
 }
 
-func ChangeSlice(a []int) []int {
-	a[1] = 99999
-	a = append(a, 100000)
-	fmt.Println(len(a), cap(a))
-	return a
-}
-
-func TestSliceSend(t *testing.T) {
-
-	a := []int{10, 10}
-	a = append(a, 10)
-	b := ChangeSlice(a)
-	fmt.Println(a, b)
-	fmt.Println(len(a), cap(a))
-}
-
+// Test whether the loop has fixed the shared variable issue.
 func TestRange(t *testing.T) {
-
 	var (
 		a     []int
 		funcs []func()
@@ -111,17 +53,17 @@ func TestRange(t *testing.T) {
 	for _, f := range funcs {
 		f()
 	}
-}
 
-func TestGetPath(t *testing.T) {
-	config := pkg.GetGlobalConfig("")
-	fmt.Println(config.F5Config)
-}
+	fmt.Println("--------------------")
 
-func TestGetOpts(t *testing.T) {
+	sg := &sync.WaitGroup{}
+	for i := range 10 {
+		sg.Add(1)
+		go func() {
+			defer sg.Done()
+			fmt.Println(i)
+		}()
+	}
 
-	t.Log("start")
-	godemo.GetOpts([]godemo.InfoInterface{}...)
-	t.Log("end")
-
+	sg.Wait()
 }
