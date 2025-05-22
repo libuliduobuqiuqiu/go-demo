@@ -67,3 +67,42 @@ func TestRange(t *testing.T) {
 
 	sg.Wait()
 }
+
+func TestComb(t *testing.T) {
+
+	var k = 3
+	var nums = []int{1, 2, 3, 4, 5}
+
+	var res ([][]int)
+	var breakTrack func(start int, comb []int)
+
+	breakTrack = func(start int, comb []int) {
+		if len(comb) == k {
+			res = append(res, comb)
+		}
+
+		for i := start; i < len(nums); i++ {
+			breakTrack(i+1, append(comb, nums[i]))
+		}
+	}
+
+	breakTrack(0, []int{})
+
+	for _, r := range res {
+		fmt.Println(r)
+	}
+}
+
+func TestDeleteSlice(t *testing.T) {
+
+	a := []string{"hello,", "world", "ifocnifg"}
+	fmt.Println(len(a))
+	a = a[1:]
+
+	fmt.Println(len(a))
+
+	b := make(map[string][]string)
+	b["info"] = append(b["info"], "name")
+	fmt.Println(b["info"])
+
+}
