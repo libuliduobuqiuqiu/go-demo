@@ -106,3 +106,15 @@ func TestDeleteSlice(t *testing.T) {
 	fmt.Println(b["info"])
 
 }
+
+func parseParms(param interface{}) {
+
+	a, _ := param.(string)
+	fmt.Println(a)
+
+}
+
+func TestParseParam(t *testing.T) {
+	parseParms(12)
+
+}

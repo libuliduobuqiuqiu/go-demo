@@ -3,6 +3,7 @@ module godemo
 go 1.23
 
 require (
+	github.com/aeden/traceroute v0.0.0-20210211061815-03f5f7cb7908
 	github.com/beego/beego/v2 v2.1.6
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-faker/faker/v4 v4.4.2
@@ -19,6 +20,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/smartystreets/goconvey v1.8.1
 	github.com/spf13/cobra v1.9.1
+	github.com/tjfoc/gmsm v1.4.1
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.28.0
 	golang.org/x/net v0.30.0
@@ -29,12 +31,12 @@ require (
 	gorm.io/gen v0.3.26
 	gorm.io/gorm v1.25.12
 	gorm.io/plugin/dbresolver v1.5.3
+	software.sslmate.com/src/go-pkcs12 v0.5.0
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/aeden/traceroute v0.0.0-20210211061815-03f5f7cb7908 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

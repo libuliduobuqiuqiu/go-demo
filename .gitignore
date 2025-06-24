@@ -28,3 +28,8 @@ ai_conf.json
 test/**/*.log
 test/**/*.gz
 *.log
+
+*.p12
+*.crt
+*.key
+*.pem

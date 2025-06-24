@@ -41,3 +41,11 @@ func TestParseUrl(t *testing.T) {
 	netdemo.ParseUrlString(url)
 
 }
+
+func TestCheckSubnet(t *testing.T) {
+
+	if err := netdemo.CheckSubnetContained(); err != nil {
+		t.Fatal(err)
+	}
+
+}
