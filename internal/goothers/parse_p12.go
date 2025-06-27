@@ -35,6 +35,12 @@ func ParseSM2P12Bydata(fileName, password string) error {
 		return err
 	}
 
+	switch cert[0].SignatureAlgorithm {
+	case x509.SM2WithSHA1, x509.SM2WithSHA256, x509.SM2WithSM3:
+		fmt.Println("Type", "SM2")
+
+	}
+	fmt.Println(cert[0].PublicKey)
 	fmt.Println(cert[0].Subject, cert[0].SignatureAlgorithm, cert[0].PublicKeyAlgorithm)
 	fmt.Println(x509.SM2)
 	fmt.Println(cert[0].PublicKeyAlgorithm == x509.SM2)

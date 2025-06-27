@@ -1,7 +1,10 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 	"sync"
 	"testing"
 	"unsafe"
@@ -107,14 +110,29 @@ func TestDeleteSlice(t *testing.T) {
 
 }
 
-func parseParms(param interface{}) {
+func TestUnmarshal(t *testing.T) {
 
-	a, _ := param.(string)
-	fmt.Println(a)
+	text := "[{\"type\":\"contains\",\"value\":\"\n\",\"key\":\"Password:\"},{\"type\":\"contains\",\"value\":\"\",\"key\":\"Horizon-86(LICENSE-EXPIRES IN 81 DAYS)#\"}]"
 
-}
+	text = strings.ReplaceAll(text, "\"\n\"", "\"\\n\"")
+	fmt.Println(text)
 
-func TestParseParam(t *testing.T) {
-	parseParms(12)
+	quote := strconv.Quote(text)
+	fmt.Println(quote)
+
+	type option struct {
+		Type  string `json:"type"`
+		Value string `json:"value"`
+		Key   string `json:"key"`
+	}
+
+	var o []option
+	if err := json.Unmarshal([]byte(text), &o); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, t := range o {
+		fmt.Println(t)
+	}
 
 }

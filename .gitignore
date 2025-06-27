@@ -33,3 +33,4 @@ test/**/*.gz
 *.crt
 *.key
 *.pem
+*.der
