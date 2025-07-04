@@ -15,13 +15,14 @@ const (
 )
 
 type GlobalConfig struct {
-	SSHConfig      BaseConfig  `json:"ssh"`
-	F5Config       BaseConfig  `json:"f5"`
-	FTPConfig      BaseConfig  `json:"ftp"`
-	MysqlConfig    MysqlConfig `json:"mysql,omiempty"`
-	CompanyMysql   MysqlConfig `json:"company,omiempty"`
-	Company57Mysql MysqlConfig `json:"company57,omiempty"`
-	Cookie         string      `json:"cookie,omiempty"`
+	SSHConfig      BaseConfig   `json:"ssh"`
+	F5Config       BaseConfig   `json:"f5"`
+	FTPConfig      BaseConfig   `json:"ftp"`
+	MysqlConfig    MysqlConfig  `json:"mysql,omiempty"`
+	CompanyMysql   MysqlConfig  `json:"company,omiempty"`
+	Company57Mysql MysqlConfig  `json:"company57,omiempty"`
+	Cookie         string       `json:"cookie,omiempty"`
+	Devices        []BaseConfig `json:"devices,omiempty"`
 }
 
 type MysqlConfig struct {
