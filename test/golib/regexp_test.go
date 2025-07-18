@@ -70,3 +70,14 @@ func TestRgexpReplace(t *testing.T) {
 	}
 
 }
+
+func TestReplaceUri(t *testing.T) {
+
+	uri := "${http_type}${address}/adcapi/v2.0?authkey=%24%7Bkey%7D&action=logout"
+
+	err := regexdemo.ReplaceUri(uri)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+}

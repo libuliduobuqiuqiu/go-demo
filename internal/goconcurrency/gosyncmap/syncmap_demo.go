@@ -29,6 +29,8 @@ func DeviceExecCommands() {
 	deviceList := []string{"192.168.121.1", "192.168.122.2", "192.168.122.3"}
 	commandList := []string{"ifconfig", "top", "free -m", "whoami"}
 
+	deviceMap.Delete("127.0.0.1")
+
 	for _, d := range deviceList {
 		for _, c := range commandList {
 			wg.Add(1)

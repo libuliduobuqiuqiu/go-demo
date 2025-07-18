@@ -136,3 +136,23 @@ func TestUnmarshal(t *testing.T) {
 	}
 
 }
+
+func switchType(p any) {
+	switch v := p.(type) {
+	case string:
+		fmt.Println(v)
+	case []byte:
+		fmt.Println(string(v))
+
+	}
+
+}
+
+func TestSwitchType(t *testing.T) {
+
+	a := "hello,world"
+
+	switchType(a)
+	switchType([]byte(a))
+
+}

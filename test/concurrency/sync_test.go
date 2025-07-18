@@ -15,3 +15,7 @@ func TestSyncMap(t *testing.T) {
 	goconcurrency.ConcurrentSyncMap()
 
 }
+
+func TestDeviceSyncMap(t *testing.T) {
+	goconcurrency.DeviceExecCommands()
+}
