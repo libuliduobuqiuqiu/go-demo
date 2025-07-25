@@ -7,15 +7,16 @@ import (
 
 func TestDiffJson(t *testing.T) {
 
-	// goothers.DiffJson("/mnt/d/Company/provider_json/local_critx.json", "/mnt/d/Company/provider_json/remote_critx.json")
+	DiffCitrixJson()
 
-	goothers.DiffJson(
-		"/mnt/d/Company/provider_json/local_hillstone_ngfw.json",
-		"/mnt/d/Company/provider_json/remote_hillstone_ngfw.json",
-	)
+	DiffHorizonJson()
 
-	DiffNginxJson()
+	DiffYKJson()
 
+	// DiffZDNSJson()
+	//
+
+	DiffH3cJson()
 }
 
 func DiffNginxJson() {
@@ -23,5 +24,46 @@ func DiffNginxJson() {
 		"/mnt/d/Company/provider_json/local_nginx.json",
 		"/mnt/d/Company/provider_json/remote_nginx.json",
 	)
+}
 
+func DiffCitrixJson() {
+	goothers.DiffJson(
+		"/mnt/d/Company/provider_json/local_citrix.json",
+		"/mnt/d/Company/provider_json/remote_citrix.json",
+	)
+}
+
+func DiffHillstoneNGFWJson() {
+	goothers.DiffJson(
+		"/mnt/d/Company/provider_json/local_hillstone_ngfw.json",
+		"/mnt/d/Company/provider_json/remote_hillstone_ngfw.json",
+	)
+}
+
+func DiffHorizonJson() {
+	goothers.DiffJson(
+		"/mnt/d/Company/provider_json/local_horizon.json",
+		"/mnt/d/Company/provider_json/remote_horizon.json",
+	)
+}
+
+func DiffYKJson() {
+	goothers.DiffJson(
+		"/mnt/d/Company/provider_json/local_yk.json",
+		"/mnt/d/Company/provider_json/remote_yk.json",
+	)
+}
+
+func DiffZDNSJson() {
+	goothers.DiffJson(
+		"/mnt/d/Company/provider_json/local_zdns.json",
+		"/mnt/d/Company/provider_json/remote_zdns.json",
+	)
+}
+
+func DiffH3cJson() {
+	goothers.DiffJson(
+		"/mnt/d/Company/provider_json/local_h3c.json",
+		"/mnt/d/Company/provider_json/remote_h3c.json",
+	)
 }

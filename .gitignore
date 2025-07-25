@@ -34,3 +34,6 @@ test/**/*.gz
 *.key
 *.pem
 *.der
+
+# bleve
+*bleve/
