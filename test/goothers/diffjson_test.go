@@ -17,6 +17,8 @@ func TestDiffJson(t *testing.T) {
 	//
 
 	DiffH3cJson()
+
+	DiffHillstoneJson()
 }
 
 func DiffNginxJson() {
@@ -66,4 +68,12 @@ func DiffH3cJson() {
 		"/mnt/d/Company/provider_json/local_h3c.json",
 		"/mnt/d/Company/provider_json/remote_h3c.json",
 	)
+}
+
+func DiffHillstoneJson() {
+	goothers.DiffJson(
+		"/mnt/d/Company/provider_json/local_hillstone.json",
+		"/mnt/d/Company/provider_json/remote_hillstone.json",
+	)
+
 }

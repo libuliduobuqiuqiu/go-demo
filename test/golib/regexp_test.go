@@ -3,6 +3,7 @@ package golib
 import (
 	"fmt"
 	"godemo/internal/golib/regexdemo"
+	"strings"
 	"testing"
 )
 
@@ -79,5 +80,12 @@ func TestReplaceUri(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+}
+
+func TestPattern(t *testing.T) {
+	a := `"abc.conf"`
+	a = strings.ReplaceAll(a, ".", `[\s\S]`)
+	fmt.Println(a)
 
 }
