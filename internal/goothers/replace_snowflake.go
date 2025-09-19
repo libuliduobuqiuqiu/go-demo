@@ -38,7 +38,7 @@ func ReplaceUUIDWithSnowflakeID(fileName string) (err error) {
 		return
 	}
 
-	err = os.WriteFile("replace_"+fileName, out, 0755)
+	err = os.WriteFile(fileName, out, 0755)
 	return
 }
 
