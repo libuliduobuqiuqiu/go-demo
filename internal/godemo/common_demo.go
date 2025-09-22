@@ -1,6 +1,9 @@
 package godemo
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type InfoInterface interface {
 	GetName() string
@@ -39,4 +42,27 @@ func CompanyGetOpts() {
 
 	// Other: you can directyl use generics.
 
+}
+
+func GetError() (res string, err error) {
+	return "failed", errors.New("failed")
+}
+
+func LazyGetError() {
+	var (
+		err error
+	)
+
+	defer LazyRecovery(&err)
+
+	res, err := GetError()
+	fmt.Println("res: ", res)
+}
+
+func LazyRecovery(err *error) {
+	if *err != nil {
+		fmt.Println(*err)
+	} else {
+		fmt.Println("error is null")
+	}
 }

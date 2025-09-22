@@ -23,5 +23,4 @@ func TestReplaceSnowFlake(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-
 }

@@ -3,6 +3,7 @@ package test
 import (
 	"encoding/json"
 	"fmt"
+	"godemo/internal/godemo"
 	"strconv"
 	"strings"
 	"sync"
@@ -155,4 +156,8 @@ func TestSwitchType(t *testing.T) {
 	switchType(a)
 	switchType([]byte(a))
 
+}
+
+func TestLazyError(t *testing.T) {
+	godemo.LazyGetError()
 }

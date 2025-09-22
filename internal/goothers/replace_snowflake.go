@@ -8,7 +8,10 @@ import (
 	"github.com/bwmarrin/snowflake"
 )
 
-var uuidRegex = regexp.MustCompile("^[a-fA-F0-9-]{32}$")
+var (
+	uuidRegex = regexp.MustCompile("^[a-fA-F0-9-]{32}$")
+	mapping   = make(map[string]string)
+)
 
 func ReplaceUUIDWithSnowflakeID(fileName string) (err error) {
 
@@ -17,8 +20,13 @@ func ReplaceUUIDWithSnowflakeID(fileName string) (err error) {
 		return
 	}
 
+	beforeData, err := BeforeExec(fileData)
+	if err != nil {
+		return
+	}
+
 	var data any
-	if err = json.Unmarshal(fileData, &data); err != nil {
+	if err = json.Unmarshal(beforeData, &data); err != nil {
 		return
 	}
 
@@ -26,8 +34,6 @@ func ReplaceUUIDWithSnowflakeID(fileName string) (err error) {
 	if err != nil {
 		return
 	}
-
-	mapping := make(map[string]string)
 
 	CollectUUID(data, mapping, node)
 
@@ -39,6 +45,24 @@ func ReplaceUUIDWithSnowflakeID(fileName string) (err error) {
 	}
 
 	err = os.WriteFile(fileName, out, 0755)
+	return
+}
+
+func BeforeExec(fileData []byte) (res []byte, err error) {
+
+	var flowConfig FlowConfig
+
+	if err = json.Unmarshal(fileData, &flowConfig); err != nil {
+		return
+	}
+
+	for _, node := range flowConfig.FlowChainNodes {
+		if node.ID != node.NodeTag {
+			node.ID = node.NodeTag
+		}
+	}
+
+	res, err = json.Marshal(flowConfig)
 	return
 }
 
