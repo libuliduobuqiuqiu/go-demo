@@ -61,7 +61,7 @@ func TestRange(t *testing.T) {
 	fmt.Println("--------------------")
 
 	sg := &sync.WaitGroup{}
-	for i := range 10 {
+	for i := 0; i < 10; i++ {
 		sg.Add(1)
 		go func() {
 			defer sg.Done()

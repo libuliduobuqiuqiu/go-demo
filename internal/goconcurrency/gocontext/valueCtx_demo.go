@@ -41,12 +41,12 @@ func HandlerUserValue() {
 	ctx.Done()
 
 	wg := &sync.WaitGroup{}
-	for range 10 {
+	for _ = range [10]struct{}{} {
 		wg.Add(1)
 		handleZhangsan(ctx, wg)
 	}
 
-	for range 10 {
+	for _ = range [10]struct{}{} {
 		wg.Add(1)
 		handleLining(ctx, wg)
 	}
