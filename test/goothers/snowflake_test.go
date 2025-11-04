@@ -9,7 +9,7 @@ import (
 )
 
 func TestReplaceSnowFlake(t *testing.T) {
-	dirPath := "/data/MyRepo/tmp/chains/"
+	dirPath := "/mnt/d/Company/tmp/replace_chains/"
 
 	files, err := os.ReadDir(dirPath)
 	if err != nil {

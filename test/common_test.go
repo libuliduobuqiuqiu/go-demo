@@ -2,13 +2,23 @@ package test
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"godemo/internal/godemo"
+	"net"
+	"os"
+	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
 	"testing"
+	"time"
 	"unsafe"
+)
+
+var (
+	Param string
 )
 
 // Test the slice expansion mechanism.
@@ -160,4 +170,80 @@ func TestSwitchType(t *testing.T) {
 
 func TestLazyError(t *testing.T) {
 	godemo.LazyGetError()
+}
+
+func TestCountTime(t *testing.T) {
+
+	err := filepath.Walk("/data/Company/log/netac/oarsflow/", func(filePath string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		subTime := time.Now().Sub(info.ModTime())
+		subDays := subTime.Hours() / 24
+		if subDays > 30 {
+			fmt.Println(filePath, info.Name())
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+}
+
+func ReturnParam() (p string, err error) {
+	return "", errors.New("test")
+}
+
+func TestUseParam(t *testing.T) {
+	var (
+		Param string
+	)
+	fmt.Println(&Param)
+
+	Param, err := ReturnParam()
+	fmt.Println(err)
+	fmt.Println(&Param)
+
+}
+
+func TestUseNet(t *testing.T) {
+
+	_, ipnet, err := net.ParseCIDR("192.168.5.0/24")
+	if err != nil {
+		t.Fatal()
+	}
+
+	networkIP := ipnet.IP.Mask(ipnet.Mask)
+	inc(networkIP)
+
+	for ip := networkIP; ipnet.Contains(ip); inc(ip) {
+		fmt.Println(ip.String())
+	}
+
+}
+
+func inc(ip net.IP) {
+	for j := len(ip) - 1; j >= 0; j-- {
+		ip[j]++
+		if ip[j] > 0 {
+			break
+		}
+	}
+}
+
+func TestRegxp(t *testing.T) {
+	reg := regexp.MustCompile(`\(serverIpAddr=([\w\.]+)&&serverPort=([\w\.]+)\)`)
+	tmpStr := `(serverIpAddr=192.168.1.210&&serverPort=1699)||(serverIpAddr=192.168.1.237&&serverPort=11499)`
+
+	res := reg.FindAllStringSubmatch(tmpStr, -1)
+	fmt.Println(res)
+
 }

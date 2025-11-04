@@ -49,3 +49,9 @@ func TestCheckSubnet(t *testing.T) {
 	}
 
 }
+
+func TestIPRange(t *testing.T) {
+
+	netdemo.CountIPRange("::1", "::ffff")
+
+}
