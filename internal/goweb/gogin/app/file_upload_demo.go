@@ -16,6 +16,13 @@ func StartFileUploadServer() {
 }
 
 func UploadFile(c *gin.Context) {
+	body, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		HandleErrResponse(c, err)
+		return
+	}
+
+	fmt.Println(string(body))
 
 	file, err := c.FormFile("file")
 	if err != nil {

@@ -15,4 +15,5 @@ func RegisterNetworkRouters(group *gin.RouterGroup) {
 	networkGroup.GET("terminal", handlers.Terminal)
 	networkGroup.GET("ping", handlers.Ping)
 	networkGroup.GET("traceroute", handlers.TraceRoute)
+	networkGroup.POST("upload", handlers.ParseFormData)
 }

@@ -245,5 +245,26 @@ func TestRegxp(t *testing.T) {
 
 	res := reg.FindAllStringSubmatch(tmpStr, -1)
 	fmt.Println(res)
+}
 
+type TempA struct {
+	AName string `json:"a_name"`
+	B     *TempB `json:"b,omitempty"`
+}
+
+type TempB struct {
+	BName string `json:"b_name"`
+}
+
+func TestMarshal(t *testing.T) {
+	a := TempA{
+		AName: "aname",
+	}
+	// a.B = &TempB{}
+	data, err := json.Marshal(a)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Println(string(data))
 }

@@ -29,14 +29,13 @@ type QueryParam struct {
 }
 
 type ViewStat struct {
-	Serveripaddr       string `json:"serveripaddr"`
-	ServerPort         string `json:"serverPort"`
-	BytesIn            int64  `json:"bytesIn"`
-	BytesOut           int64  `json:"bytesOut"`
-	NewConnections     int64  `json:"newConnections"`
-	CurrentConnections int64  `json:"currentConnections"`
-	TotalBitps         int64  `json:"totalBitps"`
-	ResponseTime       int64  `json:"responseTime"`
+	Serveripaddr                string `json:"serveripaddr"`
+	ServerPort                  string `json:"serverPort"`
+	NewFlowCount                int64  `json:"newFlowCount"`
+	AliveFlowCount              int64  `json:"aliveFlowCount"`
+	TotalBitps                  int64  `json:"totalBitps"`
+	TcpTransactionAvgRtt        int64  `json:"tcpTransactionAvgRtt"`
+	TcpRetransmissionPacketRate int64  `json:"tcpRetransmissionPacketRate"`
 }
 
 func (v *ViewStatHandlers) GetData(c *gin.Context) {
@@ -46,7 +45,7 @@ func (v *ViewStatHandlers) GetData(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	fmt.Println(c.Request.URL)
+	// fmt.Println(c.Request.URL)
 
 	fmt.Println(url.PathUnescape(c.Request.URL.String()))
 
@@ -69,14 +68,13 @@ func (v *ViewStatHandlers) GetData(c *gin.Context) {
 		fmt.Println(f)
 
 		v := &ViewStat{
-			Serveripaddr:       addr,
-			ServerPort:         port,
-			BytesIn:            1000,
-			BytesOut:           2000,
-			NewConnections:     200,
-			CurrentConnections: 100,
-			TotalBitps:         3024,
-			ResponseTime:       10,
+			Serveripaddr:                addr,
+			ServerPort:                  port,
+			NewFlowCount:                200,
+			AliveFlowCount:              100,
+			TotalBitps:                  3024,
+			TcpTransactionAvgRtt:        10,
+			TcpRetransmissionPacketRate: 20,
 		}
 		resp = append(resp, v)
 	}
