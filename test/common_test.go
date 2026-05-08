@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"godemo/internal/godemo"
 	"net"
 	"os"
 	"path/filepath"
@@ -15,10 +14,8 @@ import (
 	"testing"
 	"time"
 	"unsafe"
-)
 
-var (
-	Param string
+	"godemo/internal/godemo"
 )
 
 // Test the slice expansion mechanism.
@@ -83,9 +80,8 @@ func TestRange(t *testing.T) {
 }
 
 func TestComb(t *testing.T) {
-
-	var k = 3
-	var nums = []int{1, 2, 3, 4, 5}
+	k := 3
+	nums := []int{1, 2, 3, 4, 5}
 
 	var res ([][]int)
 	var breakTrack func(start int, comb []int)
@@ -108,7 +104,6 @@ func TestComb(t *testing.T) {
 }
 
 func TestDeleteSlice(t *testing.T) {
-
 	a := []string{"hello,", "world", "ifocnifg"}
 	fmt.Println(len(a))
 	a = a[1:]
@@ -118,11 +113,9 @@ func TestDeleteSlice(t *testing.T) {
 	b := make(map[string][]string)
 	b["info"] = append(b["info"], "name")
 	fmt.Println(b["info"])
-
 }
 
 func TestUnmarshal(t *testing.T) {
-
 	text := "[{\"type\":\"contains\",\"value\":\"\n\",\"key\":\"Password:\"},{\"type\":\"contains\",\"value\":\"\",\"key\":\"Horizon-86(LICENSE-EXPIRES IN 81 DAYS)#\"}]"
 
 	text = strings.ReplaceAll(text, "\"\n\"", "\"\\n\"")
@@ -145,7 +138,6 @@ func TestUnmarshal(t *testing.T) {
 	for _, t := range o {
 		fmt.Println(t)
 	}
-
 }
 
 func switchType(p any) {
@@ -156,16 +148,13 @@ func switchType(p any) {
 		fmt.Println(string(v))
 
 	}
-
 }
 
 func TestSwitchType(t *testing.T) {
-
 	a := "hello,world"
 
 	switchType(a)
 	switchType([]byte(a))
-
 }
 
 func TestLazyError(t *testing.T) {
@@ -173,7 +162,6 @@ func TestLazyError(t *testing.T) {
 }
 
 func TestCountTime(t *testing.T) {
-
 	err := filepath.Walk("/data/Company/log/netac/oarsflow/", func(filePath string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -191,11 +179,9 @@ func TestCountTime(t *testing.T) {
 
 		return nil
 	})
-
 	if err != nil {
 		t.Fatal(err)
 	}
-
 }
 
 func ReturnParam() (p string, err error) {
@@ -203,19 +189,15 @@ func ReturnParam() (p string, err error) {
 }
 
 func TestUseParam(t *testing.T) {
-	var (
-		Param string
-	)
+	var Param string
 	fmt.Println(&Param)
 
 	Param, err := ReturnParam()
 	fmt.Println(err)
 	fmt.Println(&Param)
-
 }
 
 func TestUseNet(t *testing.T) {
-
 	_, ipnet, err := net.ParseCIDR("192.168.5.0/24")
 	if err != nil {
 		t.Fatal()
@@ -227,7 +209,6 @@ func TestUseNet(t *testing.T) {
 	for ip := networkIP; ipnet.Contains(ip); inc(ip) {
 		fmt.Println(ip.String())
 	}
-
 }
 
 func inc(ip net.IP) {
@@ -248,8 +229,9 @@ func TestRegxp(t *testing.T) {
 }
 
 type TempA struct {
-	AName string `json:"a_name"`
-	B     *TempB `json:"b,omitempty"`
+	AName    string `json:"a_name"`
+	B        *TempB `json:"b,omitempty"`
+	IsEnable bool   `json:"is_enable,omitempty"`
 }
 
 type TempB struct {
@@ -258,7 +240,8 @@ type TempB struct {
 
 func TestMarshal(t *testing.T) {
 	a := TempA{
-		AName: "aname",
+		AName:    "aname",
+		IsEnable: true,
 	}
 	// a.B = &TempB{}
 	data, err := json.Marshal(a)
