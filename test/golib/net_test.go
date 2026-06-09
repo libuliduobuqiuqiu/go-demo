@@ -1,13 +1,14 @@
 package golib_test
 
 import (
-	"godemo/internal/golib/netdemo"
+	"fmt"
 	"net"
 	"testing"
+
+	"godemo/internal/golib/netdemo"
 )
 
 func TestScanALLIp(t *testing.T) {
-
 	// subnet := "192.168.10.0/24"
 	subnet := "2001:0db8:85a3::/64"
 	startIP := "2001:0db8:85a3:0000:0000:0000:0001:0000"
@@ -39,19 +40,34 @@ func TestNetParseIP(t *testing.T) {
 func TestParseUrl(t *testing.T) {
 	url := "http://127.0.0.1:8090/netac"
 	netdemo.ParseUrlString(url)
-
 }
 
 func TestCheckSubnet(t *testing.T) {
-
 	if err := netdemo.CheckSubnetContained(); err != nil {
 		t.Fatal(err)
 	}
-
 }
 
 func TestIPRange(t *testing.T) {
-
 	netdemo.CountIPRange("::1", "::ffff")
+}
 
+func inc(ip net.IP) {
+	for j := len(ip) - 1; j >= 0; j-- {
+		ip[j]++
+		if ip[j] > 0 {
+			break
+		}
+	}
+}
+
+func TestRandIP(t *testing.T) {
+	subnet := netdemo.RandomIPv6Subnet(64)
+	fmt.Println(subnet)
+
+	networkIP := subnet.IP.Mask(subnet.Mask)
+	for i, ip := 0, networkIP; subnet.Contains(ip) && i <= 50; inc(ip) {
+		fmt.Println(ip)
+		i++
+	}
 }

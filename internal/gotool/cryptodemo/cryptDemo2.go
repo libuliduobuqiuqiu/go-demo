@@ -2,6 +2,7 @@ package cryptodemo
 
 import (
 	"crypto/sha256"
+	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
 	"fmt"
@@ -24,6 +25,16 @@ func FingerprintSHA256(filePath string) (string, error) {
 	if block == nil {
 		return "", fmt.Errorf("failed to parse PEM block")
 	}
+
+	cert, err := x509.ParseCertificate(block.Bytes)
+	if err != nil {
+		return "", err
+	}
+
+	fmt.Println(cert.Subject.String())
+	fmt.Println(cert.Subject.CommonName)
+	fmt.Println(cert.Issuer.String())
+	fmt.Println(cert.Issuer.CommonName)
 
 	// 对 DER 编码做 SHA-256
 	hash := sha256.Sum256(block.Bytes)
@@ -53,6 +64,12 @@ func FingerprintP12SHA256(filePath, password string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	fmt.Println(cert.Subject.String())
+	fmt.Println(cert.Subject.CommonName)
+	fmt.Println(cert.DNSNames)
+	fmt.Println(cert.Issuer.String())
+	fmt.Println(cert.Issuer.CommonName)
 
 	if cert == nil {
 		return "", fmt.Errorf("no certificate found in P12 file")

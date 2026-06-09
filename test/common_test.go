@@ -251,3 +251,42 @@ func TestMarshal(t *testing.T) {
 
 	fmt.Println(string(data))
 }
+
+func CheckFieldType(x any) {
+	if v, ok := x.([]any); ok {
+		fmt.Println("list:", v)
+	} else {
+		fmt.Println("not list:", v)
+	}
+}
+
+func TestCheckFieldType(t *testing.T) {
+	var a []string
+	b := make(map[string]any)
+	text := `{"name": null}`
+
+	if err := json.Unmarshal([]byte(text), &b); err != nil {
+		t.Fatal(err)
+	}
+
+	tmpList := strings.Split("", ",")
+	fmt.Println(tmpList, len(tmpList))
+
+	CheckFieldType(a)
+	CheckFieldType(b["name"])
+}
+
+func RangeNumbers() {
+	for i := 0; i <= 10 && checkNumbers(i); i++ {
+		fmt.Println(i)
+	}
+}
+
+func checkNumbers(num int) bool {
+	fmt.Println("checkNumber: ", num)
+	return num < 5
+}
+
+func TestRangeNumbers(t *testing.T) {
+	RangeNumbers()
+}
